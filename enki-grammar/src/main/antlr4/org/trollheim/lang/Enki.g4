@@ -15,8 +15,7 @@ grammar Enki;
  
  f_types_out : type|( '(' type (',' type)*  ')');
  f_types_in  : type|( '(' type (',' type)*  ')');
- TypeId : [A-Za-z][a-zA-Z0-9]+;         
- Id : [a-z][a-zA-Z0-9]*; 
+
          
  TYPE_BASE    : 'Base'   ;
  TYPE_BOOL    : 'Bool'   ;
@@ -27,6 +26,10 @@ grammar Enki;
  
  
  my_rule :Id | type_function;
+
+
+ TypeId : [A-Za-z][a-zA-Z0-9]+;         
+ Id : [a-z][a-zA-Z0-9]*; 
  
 //block : '{' statement* '}';
 // 
