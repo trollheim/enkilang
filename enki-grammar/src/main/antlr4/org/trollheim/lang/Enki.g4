@@ -1,14 +1,21 @@
 grammar Enki;
  
  program : typedef* 
-//        funcdefs*
+           funcdefs*
 //        statement*
  ;
  
  typedef : 'typedef' TypeId '=' baseType '(' typearguments?  ')';
- 
+
+ funcdefs : 'funcdef' Id '=' type_function  '(' typearguments?  ')' function_body_components;
+
  typearguments : '{'  typeargument (',' typeargument)* '}';
  typeargument  : Id ':' type;
+
+
+
+
+
  baseType : TYPE_BASE |TypeId;
  type : type_function| TYPE_NUMBER | TYPE_STRING | TYPE_BOOL|TYPE_BYTEBUF|  TypeId;
  type_function :TYPE_FUNCTION '<' f_types_in '->' f_types_out  '>' ;
@@ -16,7 +23,24 @@ grammar Enki;
  f_types_out : type|( '(' type (',' type)*  ')');
  f_types_in  : type|( '(' type (',' type)*  ')');
 
-         
+
+function_body_components : function_body_component+;
+function_body_component : boolean_expression '::' component_body;
+
+boolean_expression: Boolean ;
+component_body: statement | '{' statement (',' statement)* '}';
+
+statement :expression | function_call|object_creation;
+
+object_creation:;
+math_expression:;
+object:;
+expression : boolean_expression | math_expression;
+
+
+function_call : function_name '(' object (',' object)*   ')';
+function_name : Id;
+
  TYPE_BASE    : 'Base'   ;
  TYPE_BOOL    : 'Bool'   ;
  TYPE_STRING  : 'Str'    ;
@@ -24,13 +48,36 @@ grammar Enki;
  TYPE_BYTEBUF : 'ByteBuf';
  TYPE_FUNCTION: 'func' ;
  
- 
- my_rule :Id | type_function;
 
 
- TypeId : [A-Za-z][a-zA-Z0-9]+;         
- Id : [a-z][a-zA-Z0-9]*; 
- 
+
+
+Boolean : 'True' | 'False';
+
+
+TypeId : [A-Za-z][a-zA-Z0-9]+;
+Id : [a-z][a-zA-Z0-9]*;
+
+//And : '&';
+//Or : '|';
+//Xor : '^';
+//Nand : '~&';
+//Nor : '~|';
+//Xnor : '~^';
+//Imply : '->';
+//Not :'~';
+//UnaryMinus : '-';
+//Sub : '-';
+//DOT : '.';
+//Add  : '+';
+//Multiply  : '*';
+//Div  : '/';
+//IntDiv  : '//';
+//Mod  : '%';
+//Pow  : '**';
+
+
+
 //block : '{' statement* '}';
 // 
 //stm_assigment : 'var' Id '=' object EOL;
@@ -82,15 +129,7 @@ grammar Enki;
 //QuotedId : '\'' [a-z][a-zA-Z0-9]* '\''; 
 //Null : 'null';
  
-//And : '&';
-//Or : '|';
-//Xor : '^';
-//Nand : '~&';
-//Nor : '~|';
-//Xnor : '~^';
-//Imply : '->';
-//Not :'~';
-//
+
 //
 //STRING_VALUE
 //   :   '\'' ('\'\'' | ~ ('\''))*   '\''

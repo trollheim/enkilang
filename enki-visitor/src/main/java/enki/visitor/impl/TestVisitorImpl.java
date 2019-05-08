@@ -4,7 +4,7 @@ import org.trollheim.lang.EnkiBaseVisitor;
 import org.trollheim.lang.EnkiParser.BaseTypeContext;
 import org.trollheim.lang.EnkiParser.F_types_inContext;
 import org.trollheim.lang.EnkiParser.F_types_outContext;
-import org.trollheim.lang.EnkiParser.My_ruleContext;
+import org.trollheim.lang.EnkiParser.FuncdefsContext;
 import org.trollheim.lang.EnkiParser.ProgramContext;
 import org.trollheim.lang.EnkiParser.TypeContext;
 import org.trollheim.lang.EnkiParser.Type_functionContext;
@@ -22,8 +22,18 @@ public class TestVisitorImpl extends EnkiBaseVisitor<Object>{
 	public Object visitProgram(ProgramContext ctx) {
 		System.out.println("visitProgram");
 		if (ctx.typedef() != null){
+			System.out.println("typedef "+ctx.typedef().size());
 			ctx.typedef().forEach(this::visitTypedef);
 		}
+		if (ctx.funcdefs() != null) {
+			System.out.println("funcdefs "+ctx.funcdefs().size());
+	 		ctx.funcdefs().forEach(this::visitFuncdefs);
+		}
+
+		if (ctx.children !=null)
+			System.out.println("children");
+
+		System.out.println("visitProgram+ "+ctx.getText());
 		return super.visitProgram(ctx);
 	}
 
@@ -39,6 +49,13 @@ public class TestVisitorImpl extends EnkiBaseVisitor<Object>{
 			visitTypearguments(ctx.typearguments());
 		}
 		return super.visitTypedef(ctx);
+	}
+
+	@Override
+	public Object visitFuncdefs(FuncdefsContext ctx) {
+		System.out.println( "F id" +ctx.Id());
+		System.out.println(ctx.type_function().getText());
+		return super.visitFuncdefs(ctx);
 	}
 
 	@Override
@@ -90,10 +107,6 @@ public class TestVisitorImpl extends EnkiBaseVisitor<Object>{
 		return super.visitF_types_in(ctx);
 	}
 
-	@Override
-	public Object visitMy_rule(My_ruleContext ctx) {
-		System.out.println("visitMy_rule");
-		return super.visitMy_rule(ctx);
-	}
+
 
 }
