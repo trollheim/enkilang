@@ -27,7 +27,9 @@ grammar Enki;
 function_body_components : function_body_component+;
 function_body_component : boolean_expression '::' component_body;
 
-boolean_expression: Boolean ;
+boolean_expression: Boolean
+
+
 component_body: statement | '{' statement (',' statement)* '}';
 
 statement :expression | function_call|object_creation;
@@ -48,8 +50,8 @@ function_name : Id;
  TYPE_BYTEBUF : 'ByteBuf';
  TYPE_FUNCTION: 'func' ;
  
-
-
+comparsion_op :;
+boolean_op :boolean_op
 
 
 Boolean : 'True' | 'False';
@@ -58,14 +60,16 @@ Boolean : 'True' | 'False';
 TypeId : [A-Za-z][a-zA-Z0-9]+;
 Id : [a-z][a-zA-Z0-9]*;
 
-//And : '&';
-//Or : '|';
-//Xor : '^';
-//Nand : '~&';
-//Nor : '~|';
-//Xnor : '~^';
-//Imply : '->';
-//Not :'~';
+And : '&';
+Or : '|';
+Xor : '^';
+Nand : '~&';
+Nor : '~|';
+Xnor : '~^';
+Imply : '->';
+Not :'~';
+
+
 //UnaryMinus : '-';
 //Sub : '-';
 //DOT : '.';
