@@ -25,20 +25,29 @@ grammar Enki;
 
 
 function_body_components : function_body_component+;
-function_body_component : boolean_expression '::' component_body;
+function_body_component : expression '::' component_body;
 
-boolean_expression: Boolean
 
 
 component_body: statement | '{' statement (',' statement)* '}';
 
-statement :expression | function_call|object_creation;
+statement :expression |object_creation;
 
 object_creation:;
 math_expression:;
 object:;
-expression : boolean_expression | math_expression;
+expression :primary
+           | function_call
+           | expression bop=('*'|'/'|'%') expression
+           | expression bop=('+'|'-') expression
+           | expression ('<<' | '>>') expression
+           | expression bop=('<=' | '>=' | '>' | '<') expression
+         //  | funxtion
+                                             ;
 
+
+
+primary   : '(' expression ')'   | literal;
 
 function_call : function_name '(' object (',' object)*   ')';
 function_name : Id;
@@ -49,16 +58,22 @@ function_name : Id;
  TYPE_NUMBER  : 'Num'    ;
  TYPE_BYTEBUF : 'ByteBuf';
  TYPE_FUNCTION: 'func' ;
- 
-comparsion_op :;
-boolean_op :boolean_op
+
 
 
 Boolean : 'True' | 'False';
 
 
+
+
+
 TypeId : [A-Za-z][a-zA-Z0-9]+;
 Id : [a-z][a-zA-Z0-9]*;
+
+
+
+
+
 
 And : '&';
 Or : '|';
@@ -80,6 +95,33 @@ Not :'~';
 //Mod  : '%';
 //Pow  : '**';
 
+literal
+    : byteLiteral
+    | NUMBER_LITERAL
+    | CHAR_LITERAL
+    | STRING_LITERAL
+    | BOOL_LITERAL
+    ;
+
+CHAR_LITERAL:       '\'' (~['\\\r\n] | EscapeSequence) '\'';
+NUMBER_LITERAL : Digit ('.' Digit)? ;
+STRING_LITERAL:     '"' (~["\\\r\n] | EscapeSequence)* '"';
+BOOL_LITERAL:       'true'
+            |       'false'
+            ;
+fragment EscapeSequence
+    : '\\' [btnfr"'\\];
+
+byteLiteral : HEXBYTES;
+
+HEXBYTES : '0x' HexDigit+;
+
+fragment HexDigit
+    : [0-9a-fA-F]
+    ;
+fragment Digit
+    : [0-9]
+    ;
 
 
 //block : '{' statement* '}';
